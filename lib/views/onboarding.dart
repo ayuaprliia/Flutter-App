@@ -113,49 +113,113 @@ class OnboardingViewState extends State<OnboardingView> {
                     ],
                   ),
                 ),
-               
-               //membuat button
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:16),
-                  child: GestureDetector(
-                    onTap: (){
-                      pageController.animateToPage(currentPage+1, 
-                      duration: const Duration(milliseconds: 200), 
-                      curve: Curves.easeInOut);
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical:13.5),
-                      decoration: BoxDecoration(color: blueColor, borderRadius: BorderRadius.circular(100)),
-                      child:  Text(currentPage == 2 ? "Masuk" : "Lanjutkan", 
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: "PoppinsMedium", fontSize: 16, color: Colors.white),
+
+              //membuat button
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if(currentPage!= 2)
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 65),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Mengarahkan ke halaman selanjutnya jika mengklik tombol Lewati/Masuk
+                              pageController.animateToPage(
+                                2,
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 9),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: const Text(
+                                 "Lewati",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: "PoppinsMedium",
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
+                      ),
+
+                      if(currentPage!= 2)
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 65),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Mengarahkan ke halaman selanjutnya jika mengklik tombol Daftar/Selanjutnya
+                              pageController.animateToPage(
+                                currentPage+1,
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 9),
+                              decoration: BoxDecoration(
+                                color: blueColor,
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: const Text(
+                                 "Selanjutnya",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: "PoppinsMedium",
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      
+                      if (currentPage == 2)
+                      Expanded(
+                        child: 
+                        Padding(
+                          padding:const EdgeInsets.symmetric(horizontal: 65),
+                            child: GestureDetector(
+                             onTap: (){
+                              print("mulai sekarang");
+                             },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 9),
+                                decoration: BoxDecoration(
+                                color:blueColor, 
+                                borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: const Text(
+                                  "Mulai Sekarang",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontFamily: "PoppinsSemiBold",
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                       )
+                      ],
                     ),
                   ),
-                ),
-                
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal:16),
-                child: GestureDetector(
-                  onTap: (){
-                      pageController.animateToPage(2, 
-                      duration: const Duration(milliseconds: 200), 
-                      curve: Curves.easeInOut);
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical:13.5),
-                    decoration: BoxDecoration(color:Colors.white, borderRadius: BorderRadius.circular(100)),
-                    child: Text( currentPage == 2 ? "Daftar" : "Lewati", 
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: "PoppinsMedium", fontSize: 16, color: blueColor),
-                    ),
-                ),
-              ),
-            )
+                ),              
               ],
             ),
           ],
