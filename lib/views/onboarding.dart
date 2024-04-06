@@ -27,6 +27,8 @@ class OnboardingView extends StatefulWidget {
 }
 
 class OnboardingViewState extends State<OnboardingView> {
+  final PageController pageController = PageController();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +67,32 @@ class OnboardingViewState extends State<OnboardingView> {
            
             Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 40),
+                  child: Wrap(
+                    spacing: 8,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(color: blueColor, 
+                        borderRadius: BorderRadius.circular(10)),
+                        height: 8,
+                        width: 25,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(color: grayColor, 
+                        borderRadius: BorderRadius.circular(10)),
+                        height: 8,
+                        width: 8,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(color: grayColor, 
+                        borderRadius: BorderRadius.circular(10)),
+                        height: 8,
+                        width: 8,
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:16),
                   child: GestureDetector(
