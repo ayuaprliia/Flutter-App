@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas1/utility/colors.dart';
 
+//menambahkan list agar gambar, judul, dan deskripsi dapat berubah ketika page di-slide
 List onboardingData = [
   {
     "image":"assets/images/onBoarding1.png",
@@ -27,8 +28,10 @@ class OnboardingView extends StatefulWidget {
 }
 
 class OnboardingViewState extends State<OnboardingView> {
+  //menambahkan page controller dengan menginisiasi variabel currentPage yang diset dengan nilai awal  0
   final PageController pageController = PageController();
-  
+  int currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,19 +39,31 @@ class OnboardingViewState extends State<OnboardingView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            //dibungkus dengan expanded untuk memberikan pemisah dengan kolom button
             Expanded(
+              //widget Pageview.builder untuk menampilkan onboarding page yang nantinya bisa dislide 
               child: PageView.builder(
+                controller: pageController,
+                onPageChanged: (value){
+                  // print(value.toString()); (mengecek indeks halaman)
+                  setState(() {
+                  currentPage = value;                    
+                  });
+                },
+                
+                //membuat halaman onboarding dengan mengakses data yang sudah dibuat di List onboardingData. itemCount digunakan untuk menghitung panjang dari onboardingData
                 itemCount: onboardingData.length,
-                itemBuilder: (_,i){
+                itemBuilder: (_,i){  //membangun widget yang akan ditampilkan di dalam PageView
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                   Image.asset(onboardingData[i]['image']),
                   Column(
                     children: [
-                       Text(
+                        Text(
                         onboardingData[i]['title'],
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontFamily: "PoppinsBold", fontSize: 24),
+                        style: const TextStyle(fontFamily: "PoppinsBold", fontSize: 24),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 22.0),
@@ -65,6 +80,7 @@ class OnboardingViewState extends State<OnboardingView> {
               }),
             ),
            
+           //Membuat indikator
             Column(
               children: [
                 Padding(
@@ -73,58 +89,64 @@ class OnboardingViewState extends State<OnboardingView> {
                     spacing: 8,
                     children: [
                       Container(
-                        decoration: BoxDecoration(color: blueColor, 
-                        borderRadius: BorderRadius.circular(10)),
-                        height: 8,
-                        width: 25,
+                        decoration: BoxDecoration(
+                          color: currentPage == 0 ? blueColor : grayColor, 
+                          borderRadius: BorderRadius.circular(10)),
+                          height: 8,
+                          width: currentPage == 0 ? 25 : 8,
                       ),
                       Container(
-                        decoration: BoxDecoration(color: grayColor, 
-                        borderRadius: BorderRadius.circular(10)),
-                        height: 8,
-                        width: 8,
+                        decoration: BoxDecoration(
+                          color: currentPage == 1 ? blueColor : grayColor, 
+                          borderRadius: BorderRadius.circular(10)),
+                          height: 8,
+                          width: currentPage == 1 ? 25 : 8,
                       ),
                       Container(
-                        decoration: BoxDecoration(color: grayColor, 
-                        borderRadius: BorderRadius.circular(10)),
-                        height: 8,
-                        width: 8,
+                        decoration: BoxDecoration(
+                          color: currentPage == 2 ? blueColor : grayColor, 
+                          borderRadius: BorderRadius.circular(10)),
+                          height: 8,
+                          width: currentPage == 2 ? 25 : 8,
                       ),
                     ],
                   ),
                 ),
+               
+               //membuat button
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:16),
                   child: GestureDetector(
                     onTap: (){
-                      print("Lanjutkan");
+                      // print("Lanjutkan");
                     },
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical:13.5),
                       decoration: BoxDecoration(color: blueColor, borderRadius: BorderRadius.circular(4)),
-                      child: const Text("Lanjutkan", 
+                      child:  Text(currentPage == 2 ? "Masuk" : "Lanjutkan", 
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: "PoppinsMedium", fontSize: 16, color: Colors.white),
                         ),
                     ),
                   ),
                 ),
-                Padding(
-              padding: const EdgeInsets.symmetric(horizontal:16),
-              child: GestureDetector(
-                onTap: (){
-                  print("Lewati");
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical:13.5),
-                  decoration: BoxDecoration(color:Colors.white, borderRadius: BorderRadius.circular(4)),
-                  child: Text("Lewati", 
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: "PoppinsMedium", fontSize: 16, color: blueColor),
+                
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:16),
+                child: GestureDetector(
+                  onTap: (){
+                    // print("Lewati");
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical:13.5),
+                    decoration: BoxDecoration(color:Colors.white, borderRadius: BorderRadius.circular(4)),
+                    child: Text( currentPage == 2 ? "Daftar" : "Lewati", 
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "PoppinsMedium", fontSize: 16, color: blueColor),
                     ),
                 ),
               ),
