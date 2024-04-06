@@ -1,6 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:tugas1/utility/colors.dart';
+import 'package:tugas1/views/greeting.dart';
 
 //menambahkan list agar gambar, judul, dan deskripsi dapat berubah ketika page di-slide
 List onboardingData = [
@@ -195,7 +196,12 @@ class OnboardingViewState extends State<OnboardingView> {
                           padding:const EdgeInsets.symmetric(horizontal: 65),
                             child: GestureDetector(
                              onTap: (){
-                              print("mulai sekarang");
+
+                              //menavigasi atau melemparkan halaman onboarding ke halaman greeting
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                  const GreetingView()));
                              },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(vertical: 9),
