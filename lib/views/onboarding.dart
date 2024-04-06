@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:tugas1/utility/colors.dart';
 
@@ -118,12 +119,14 @@ class OnboardingViewState extends State<OnboardingView> {
                   padding: const EdgeInsets.symmetric(horizontal:16),
                   child: GestureDetector(
                     onTap: (){
-                      // print("Lanjutkan");
+                      pageController.animateToPage(currentPage+1, 
+                      duration: const Duration(milliseconds: 200), 
+                      curve: Curves.easeInOut);
                     },
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical:13.5),
-                      decoration: BoxDecoration(color: blueColor, borderRadius: BorderRadius.circular(4)),
+                      decoration: BoxDecoration(color: blueColor, borderRadius: BorderRadius.circular(100)),
                       child:  Text(currentPage == 2 ? "Masuk" : "Lanjutkan", 
                       textAlign: TextAlign.center,
                       style: const TextStyle(
@@ -137,12 +140,14 @@ class OnboardingViewState extends State<OnboardingView> {
                 padding: const EdgeInsets.symmetric(horizontal:16),
                 child: GestureDetector(
                   onTap: (){
-                    // print("Lewati");
+                      pageController.animateToPage(2, 
+                      duration: const Duration(milliseconds: 200), 
+                      curve: Curves.easeInOut);
                   },
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical:13.5),
-                    decoration: BoxDecoration(color:Colors.white, borderRadius: BorderRadius.circular(4)),
+                    decoration: BoxDecoration(color:Colors.white, borderRadius: BorderRadius.circular(100)),
                     child: Text( currentPage == 2 ? "Daftar" : "Lewati", 
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -153,8 +158,6 @@ class OnboardingViewState extends State<OnboardingView> {
             )
               ],
             ),
-            
-            
           ],
         ),
       ),
