@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tugas1/utility/colors.dart';
 
 class OnboardingView extends StatefulWidget {
@@ -16,10 +15,10 @@ class OnboardingViewState extends State<OnboardingView> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+          children: [
+            PageView.builder(itemBuilder: (_, i) {
+              return Column(
+                children: [
                 Image.asset('assets/images/onBoarding_1.png'),
                 Column(
                   children: [
@@ -29,7 +28,7 @@ class OnboardingViewState extends State<OnboardingView> {
                       style: TextStyle(fontFamily: "PoppinsBold", fontSize: 24),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(top: 22.0),
                       child: Text(
                         "Selamat Datang di Signify!",
                         textAlign: TextAlign.center,
@@ -38,8 +37,47 @@ class OnboardingViewState extends State<OnboardingView> {
                     ),
                   ],
                 ),
-              ],
+                ],
+              );
+            }),
+           
+           Padding(
+              padding: const EdgeInsets.symmetric(horizontal:16),
+              child: GestureDetector(
+                onTap: (){
+                  print("Lanjutkan");
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical:13.5),
+                  decoration: BoxDecoration(color: blueColor, borderRadius: BorderRadius.circular(4)),
+                  child: const Text("Lanjutkan", 
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "PoppinsMedium", fontSize: 16, color: Colors.white),
+                    ),
+                ),
+              ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal:16),
+              child: GestureDetector(
+                onTap: (){
+                  print("Lewati");
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical:13.5),
+                  decoration: BoxDecoration(color:Colors.white, borderRadius: BorderRadius.circular(4)),
+                  child: Text("Lewati", 
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "PoppinsMedium", fontSize: 16, color: blueColor),
+                    ),
+                ),
+              ),
+            )
+            
           ],
         ),
       ),
