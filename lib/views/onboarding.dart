@@ -196,12 +196,11 @@ class OnboardingViewState extends State<OnboardingView> {
                           padding:const EdgeInsets.symmetric(horizontal: 65),
                             child: GestureDetector(
                              onTap: (){
-
                               //menavigasi atau melemparkan halaman onboarding ke halaman greeting
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                  const GreetingView()));
+                              Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const GreetingView())
+                              );
                              },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(vertical: 9),

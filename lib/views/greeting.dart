@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas1/views/login.dart';
 import '../utility/colors.dart';
 
 class GreetingView extends StatefulWidget {
@@ -12,9 +13,9 @@ class _GreetingViewState extends State<GreetingView> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: Center(
+      body: SingleChildScrollView(
         child:Padding(
-          padding:const EdgeInsets.fromLTRB(8, 55, 8, 55),
+          padding:const EdgeInsets.fromLTRB(8, 55, 8, 55),  //mengatur posisi dan jarak text dengan gambar
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -51,7 +52,10 @@ class _GreetingViewState extends State<GreetingView> {
                   padding: const EdgeInsets.symmetric(horizontal:16),
                   child: GestureDetector(
                     onTap: (){
-                      print("masuk");
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginView())
+                      );
                     },
                     child: Container(
                       width: double.infinity,
