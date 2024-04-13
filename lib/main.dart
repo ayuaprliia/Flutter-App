@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tugas1/utility/colors.dart';
+import 'package:tugas1/views/greeting.dart';
+import 'package:tugas1/views/home.dart';
+import 'package:tugas1/views/login.dart';
 import 'package:tugas1/views/onboarding.dart';
+import 'package:tugas1/views/register.dart';
 
 
 void main() {
@@ -14,13 +19,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'onboarding',
+      title: 'login',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(seedColor: blueColor),
         useMaterial3: true,
       ),
       home: const OnboardingView(),
     );
   }
+  
 }
 
