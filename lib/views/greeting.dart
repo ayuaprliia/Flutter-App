@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas1/views/login.dart';
+import 'package:tugas1/views/register.dart';
 import '../utility/colors.dart';
 
 class GreetingView extends StatefulWidget {
@@ -54,7 +55,7 @@ class _GreetingViewState extends State<GreetingView> {
                     onTap: (){
                       Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const LoginView())
+                      MaterialPageRoute(builder: (context) => const RegisterView())
                       );
                     },
                     child: Container(
@@ -79,6 +80,9 @@ class _GreetingViewState extends State<GreetingView> {
                 child: GestureDetector(
                   onTap: (){
                     print("daftar");
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return const LoginView();
+                    }));
                   },
                   child: Container(
                     width: double.infinity,

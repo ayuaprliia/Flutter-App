@@ -159,7 +159,7 @@ class OnboardingViewState extends State<OnboardingView> {
                       if(currentPage!= 2)
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 65),
+                          padding: const EdgeInsets.symmetric(horizontal: 50),
                           child: GestureDetector(
                             onTap: () {
                               // Mengarahkan ke halaman selanjutnya jika mengklik tombol Daftar/Selanjutnya
