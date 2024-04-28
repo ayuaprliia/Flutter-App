@@ -1,7 +1,15 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: avoid_print
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:tugas1/utility/colors.dart';
+
+final _dio = Dio();
+final _storage = GetStorage();
+final _apiUrl = 'https://mobileapis.manpits.xyz/api';
+String _userName = "";
+String _email = "";
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -11,7 +19,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  // String _userName = "";
+
   @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
@@ -25,39 +40,56 @@ class _HomeViewState extends State<HomeView> {
                 bottomRight: Radius.circular(20),
               ),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image(
+                    const Image(
                       image: AssetImage("assets/images/Logo.png"),
                     ),
-                    Icon(
-                      Icons.notifications,
-                      size: 38,
-                      color: Colors.white,
-                    )
+                    IconButton(
+                      onPressed: () {
+                        goLogout();
+                      },
+                      icon: const Icon(
+                        Icons.logout,
+                        size: 38,
+                        color: Colors.white,
+                      ),
+                    ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 15),
-                  child: Text(
-                    "HALO, AYU APRILIA!",
-                    style: TextStyle(
-                      fontFamily: "PoppinsSemiBold",
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "HALO, ",
+                        style: TextStyle(
+                          fontFamily: "PoppinsSemiBold",
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      ),
+                      Text(
+                        _userName,
+                        style: const TextStyle(
+                          fontFamily: "PoppinsSemiBold",
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
           const Padding(
-            padding: const EdgeInsets.only(top: 100),
+            padding: EdgeInsets.only(top: 100),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -78,13 +110,83 @@ class _HomeViewState extends State<HomeView> {
         selectedFontSize: 18,
         unselectedItemColor: fontGrayColor,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'Modul'),
-          BottomNavigationBarItem(icon: Icon(Icons.quiz), label: 'FunQuiz'),
-          BottomNavigationBarItem(icon: Icon(Icons.groups), label: 'Komunitas'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              icon: const Icon(Icons.home),
+              onPressed: () {},
+            ),
+            label: 'Beranda',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              icon: const Icon(Icons.menu_book),
+              onPressed: () {},
+            ),
+            label: 'Modul',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              icon: const Icon(Icons.quiz),
+              onPressed: () {},
+            ),
+            label: 'FunQuiz',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              icon: const Icon(Icons.groups),
+              onPressed: () {},
+            ),
+            label: 'Komunitas',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              icon: const Icon(Icons.person),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/profile');
+              },
+            ),
+            label: 'Profil',
+          ),
         ],
       ),
     );
+  }
+
+  void getUser() async {
+    try {
+      final _response = await _dio.get(
+        "$_apiUrl/user",
+        options: Options(
+          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
+        ),
+      );
+
+      setState(() {
+        _userName = _response.data['data']['user']['name'];
+        _email = _response.data['data']['user']['email'];
+      });
+    } on DioException catch (e) {
+      print('${e.response} - ${e.response?.statusCode}');
+    }
+  }
+
+  void goLogout() async {
+    try {
+      final _response = await _dio.get(
+        '${_apiUrl}/logout',
+        options: Options(
+          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
+        ),
+      );
+      await _storage.remove('token');
+      if (_response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, '/greeting');
+      }
+
+      print(_response.data);
+    } on DioException catch (e) {
+      print('${e.response} - ${e.response?.statusCode}');
+    }
   }
 }

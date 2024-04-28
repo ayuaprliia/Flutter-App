@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tugas1/views/login.dart';
-import 'package:tugas1/views/login.dart';
 import 'package:tugas1/views/register.dart';
 import '../utility/colors.dart';
 
@@ -51,10 +49,7 @@ class _GreetingViewState extends State<GreetingView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginView()));
+                    Navigator.pushNamed(context, '/login');
                   },
                   child: Container(
                     width: double.infinity,

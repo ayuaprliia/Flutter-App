@@ -1,12 +1,12 @@
-import 'package:email_validator/email_validator.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:tugas1/utility/colors.dart';
-import 'package:tugas1/views/greeting.dart';
-import 'package:tugas1/views/home.dart';
 import 'package:tugas1/views/onboarding.dart';
-import 'package:tugas1/views/login.dart';
+
+final _dio = Dio();
+final _storage = GetStorage();
+final _apiUrl = 'https://mobileapis.manpits.xyz/api';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -21,8 +21,8 @@ class _RegisterViewState extends State<RegisterView> {
   bool isVerifiedHidden = true;
   bool errorMessage = false;
   String errMessage = "";
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController phoneNumController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController verifyPassController = TextEditingController();
 
@@ -38,9 +38,7 @@ class _RegisterViewState extends State<RegisterView> {
       });
       errMessage = "password must be the same";
     } else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const HomeView();
-      }));
+      goRegister();
     }
   }
 
@@ -92,6 +90,7 @@ class _RegisterViewState extends State<RegisterView> {
                 child: SizedBox(
                   width: 327,
                   child: TextField(
+                    controller: nameController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10))),
@@ -102,7 +101,7 @@ class _RegisterViewState extends State<RegisterView> {
                 alignment: Alignment.centerLeft,
                 child: Container(
                   margin: const EdgeInsets.only(left: 24),
-                  child: Text("No Telepon",
+                  child: Text("Email",
                       style: TextStyle(
                           color: fontGrayColor, fontFamily: "PoppinsMedium")),
                 ),
@@ -112,9 +111,7 @@ class _RegisterViewState extends State<RegisterView> {
                 child: SizedBox(
                   width: 327,
                   child: TextField(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    controller: phoneNumController,
+                    controller: emailController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10))),
@@ -263,10 +260,7 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return const LoginView();
-                          }));
+                          Navigator.pushNamed(context, '/home');
                         },
                         child: Text("Masuk",
                             style: TextStyle(
@@ -283,5 +277,26 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
+  }
+
+  void goRegister() async {
+    try {
+      final _response = await _dio.post(
+        '${_apiUrl}/register',
+        data: {
+          'name': nameController.text,
+          'email': emailController.text,
+          'password': passwordController.text,
+        },
+      );
+      if (_response.statusCode == 200) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+
+      print(_response.data);
+      _storage.write('token', _response.data['data']['token']);
+    } on DioException catch (e) {
+      print('${e.response} - ${e.response?.statusCode}');
+    }
   }
 }

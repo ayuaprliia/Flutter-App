@@ -1,18 +1,15 @@
-import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:tugas1/utility/colors.dart';
-import 'package:tugas1/views/greeting.dart';
-import 'package:tugas1/views/home.dart';
-import 'package:tugas1/views/login.dart';
-import 'package:tugas1/views/onboarding.dart';
 import 'package:tugas1/views/register.dart';
 
+final _dio = Dio();
+final _storage = GetStorage();
+final _apiUrl = 'https://mobileapis.manpits.xyz/api';
+
 class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+  LoginView({super.key});
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -24,29 +21,43 @@ class _LoginViewState extends State<LoginView> {
   bool isVerifiedHidden = true;
   bool errorMessage = false;
   String errMessage = "";
-  TextEditingController phoneNumController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  void validityCheck() {
-    if (passwordController.text.isEmpty) {
-      setState(() {
-        errorMessage = true;
-      });
-      errMessage = "password cant be empty";
-    } else if (phoneNumController.text.isEmpty) {
-      setState(() {
-        errorMessage = true;
-        errMessage = "invalid phone number";
-      });
-    } else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const HomeView();
-      }));
-    }
-  }
+  // void validityCheck() {
+  //   if (passwordController.text.isEmpty) {
+  //     setState(() {
+  //       errorMessage = true;
+  //     });
+  //     errMessage = "password cant be empty";
+  //   } else if (emailController.text.isEmpty) {
+  //     setState(() {
+  //       errorMessage = true;
+  //       errMessage = "invalid phone number";
+  //     });
+  //   } else {
+  //     goLogin();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    void goLogin() async {
+      try {
+        final _response = await _dio.post('${_apiUrl}/login', data: {
+          'email': emailController.text,
+          'password': passwordController.text
+        });
+        if (_response.statusCode == 200) {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+        print(_response.data);
+        _storage.write('token', _response.data['data']['token']);
+      } on DioException catch (e) {
+        print('${e.response} - ${e.response?.statusCode}');
+      }
+    }
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70),
@@ -87,7 +98,7 @@ class _LoginViewState extends State<LoginView> {
                 alignment: Alignment.centerLeft,
                 child: Container(
                   margin: const EdgeInsets.only(left: 24),
-                  child: Text("No Telepon",
+                  child: Text("Email",
                       style: TextStyle(
                           color: fontGrayColor, fontFamily: "PoppinsMedium")),
                 ),
@@ -97,9 +108,7 @@ class _LoginViewState extends State<LoginView> {
                 child: SizedBox(
                   width: 327,
                   child: TextField(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    controller: phoneNumController,
+                    controller: emailController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10))),
@@ -181,7 +190,8 @@ class _LoginViewState extends State<LoginView> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        validityCheck();
+                        // validityCheck();
+                        goLogin();
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2C599D),
