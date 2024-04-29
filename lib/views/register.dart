@@ -290,7 +290,7 @@ class _RegisterViewState extends State<RegisterView> {
         },
       );
       if (_response.statusCode == 200) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushNamed(context, '/home');
       }
 
       print(_response.data);

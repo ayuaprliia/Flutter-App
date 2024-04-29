@@ -9,7 +9,6 @@ final _dio = Dio();
 final _storage = GetStorage();
 final _apiUrl = 'https://mobileapis.manpits.xyz/api';
 String _userName = "";
-String _email = "";
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -24,7 +23,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    getUser();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      getUser();
+    });
   }
 
   Widget build(BuildContext context) {
@@ -50,11 +51,9 @@ class _HomeViewState extends State<HomeView> {
                       image: AssetImage("assets/images/Logo.png"),
                     ),
                     IconButton(
-                      onPressed: () {
-                        goLogout();
-                      },
+                      onPressed: () {},
                       icon: const Icon(
-                        Icons.logout,
+                        Icons.notifications,
                         size: 38,
                         color: Colors.white,
                       ),
@@ -163,30 +162,29 @@ class _HomeViewState extends State<HomeView> {
 
       setState(() {
         _userName = _response.data['data']['user']['name'];
-        _email = _response.data['data']['user']['email'];
       });
     } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
     }
   }
 
-  void goLogout() async {
-    try {
-      final _response = await _dio.get(
-        '${_apiUrl}/logout',
-        options: Options(
-          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
-        ),
-      );
-      await _storage.remove('token');
-      if (_response.statusCode == 200) {
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacementNamed(context, '/greeting');
-      }
+  // void goLogout() async {
+  //   try {
+  //     final _response = await _dio.get(
+  //       '${_apiUrl}/logout',
+  //       options: Options(
+  //         headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
+  //       ),
+  //     );
+  //     await _storage.remove('token');
+  //     if (_response.statusCode == 200) {
+  //       // ignore: use_build_context_synchronously
+  //       Navigator.pushReplacementNamed(context, '/greeting');
+  //     }
 
-      print(_response.data);
-    } on DioException catch (e) {
-      print('${e.response} - ${e.response?.statusCode}');
-    }
-  }
+  //     print(_response.data);
+  //   } on DioException catch (e) {
+  //     print('${e.response} - ${e.response?.statusCode}');
+  //   }
+  // }
 }

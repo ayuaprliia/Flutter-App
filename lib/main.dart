@@ -4,6 +4,7 @@ import 'package:tugas1/utility/colors.dart';
 import 'package:tugas1/views/greeting.dart';
 import 'package:tugas1/views/home.dart';
 import 'package:tugas1/views/login.dart';
+import 'package:tugas1/views/onboarding.dart';
 import 'package:tugas1/views/profile.dart';
 import 'package:tugas1/views/register.dart';
 
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: blueColor),
         useMaterial3: true,
       ),
-      home:  LoginView(),
+      home:  const OnboardingView(),
     );
   }
 }
