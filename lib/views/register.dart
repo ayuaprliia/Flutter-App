@@ -203,9 +203,10 @@ class _RegisterViewState extends State<RegisterView> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        setState(() {
-                          validityCheck();
-                        });
+                        // setState(() {
+                        //   // validityCheck();
+                        // });
+                        goRegister();
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2C599D),
@@ -260,7 +261,7 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.pushNamed(context, '/login');
                         },
                         child: Text("Masuk",
                             style: TextStyle(
@@ -290,12 +291,12 @@ class _RegisterViewState extends State<RegisterView> {
         },
       );
       if (_response.statusCode == 200) {
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/login');
       }
 
       print(_response.data);
-      _storage.write('token', _response.data['data']['token']);
     } on DioException catch (e) {
+      print(e.message);
       print('${e.response} - ${e.response?.statusCode}');
     }
   }

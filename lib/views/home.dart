@@ -23,9 +23,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 500), () {
-      getUser();
-    });
+    getUser();
   }
 
   Widget build(BuildContext context) {

@@ -42,22 +42,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    void goLogin() async {
-      try {
-        final _response = await _dio.post('${_apiUrl}/login', data: {
-          'email': emailController.text,
-          'password': passwordController.text
-        });
-        if (_response.statusCode == 200) {
-          Navigator.pushReplacementNamed(context, '/home');
-        }
-        print(_response.data);
-        _storage.write('token', _response.data['data']['token']);
-      } on DioException catch (e) {
-        print('${e.response} - ${e.response?.statusCode}');
-      }
-    }
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70),
@@ -258,5 +242,21 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
     );
+  }
+
+  void goLogin() async {
+    try {
+      final _response = await _dio.post('${_apiUrl}/login', data: {
+        'email': emailController.text,
+        'password': passwordController.text
+      });
+      if (_response.statusCode == 200) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+      print(_response.data);
+      _storage.write('token', _response.data['data']['token']);
+    } on DioException catch (e) {
+      print('${e.response} - ${e.response?.statusCode}');
+    }
   }
 }
