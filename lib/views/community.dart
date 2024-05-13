@@ -7,15 +7,15 @@ class Anggota {
   final int id;
   final String nama;
   final String alamat;
-  String? telepon;
-  String? tanggalLahir;
+  final String telepon;
+  final String tanggalLahir;
 
   Anggota({
     required this.id,
     required this.nama,
     required this.alamat,
-    this.telepon,
-    this.tanggalLahir,
+    required this.telepon,
+    required this.tanggalLahir,
   });
 
   factory Anggota.fromJson(Map<String, dynamic> json) {
@@ -23,6 +23,8 @@ class Anggota {
       id: json['id'] ?? 0,
       nama: json['nama'] ?? '',
       alamat: json['alamat'] ?? '',
+      telepon: json['telepon'] ?? '',
+      tanggalLahir: json['tgl_lahir'] ?? '',
     );
   }
 }
@@ -171,54 +173,76 @@ class _CommunityViewState extends State<CommunityView> {
                               icon: Icon(Icons.edit),
                               color: Colors.white,
                               onPressed: () {
-
-                                   showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              final noIndukController = TextEditingController(text: Anggota.id.toString());
-    final namaController = TextEditingController(text: Anggota.nama);
-    final tanggalLahirController = TextEditingController(text: Anggota.tanggalLahir);
-    final alamatController = TextEditingController(text: Anggota.alamat);
-    final phoneController = TextEditingController(text: Anggota.telepon);
-              return AlertDialog(
-                title: Text("Detail Anggota"),
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                     TextField(
-        controller: noIndukController,
-        decoration: InputDecoration(labelText: 'Nomor Induk'),
-      ),
-      TextField(
-        controller: namaController,
-        decoration: InputDecoration(labelText: 'Nama'),
-      ),
-      TextField(
-        controller: tanggalLahirController,
-        decoration: InputDecoration(labelText: 'Tanggal Lahir'),
-      ),
-      TextField(
-        controller: alamatController,
-        decoration: InputDecoration(labelText: 'Alamat'),
-      ),
-      TextField(
-        controller: phoneController,
-        decoration: InputDecoration(labelText: 'Telepon'),
-      ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Tutup"),
-                  ),
-                ],
-              );
-            },
-          );
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    final noIndukController =
+                                        TextEditingController(
+                                            text: Anggota.id.toString());
+                                    final namaController =
+                                        TextEditingController(
+                                            text: Anggota.nama);
+                                    final tanggalLahirController =
+                                        TextEditingController(
+                                            text: Anggota.tanggalLahir);
+                                    final alamatController =
+                                        TextEditingController(
+                                            text: Anggota.alamat);
+                                    final phoneController =
+                                        TextEditingController(
+                                            text: Anggota.telepon);
+                                    return AlertDialog(
+                                      title: Text("Edit Anggota"),
+                                      content: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          TextField(
+                                            controller: noIndukController,
+                                            decoration: InputDecoration(
+                                                labelText: 'Nomor Induk'),
+                                          ),
+                                          TextField(
+                                            controller: namaController,
+                                            decoration: InputDecoration(
+                                                labelText: 'Nama'),
+                                          ),
+                                          TextField(
+                                            controller: tanggalLahirController,
+                                            decoration: InputDecoration(
+                                                labelText: 'Tanggal Lahir'),
+                                          ),
+                                          TextField(
+                                            controller: alamatController,
+                                            decoration: InputDecoration(
+                                                labelText: 'Alamat'),
+                                          ),
+                                          TextField(
+                                            controller: phoneController,
+                                            decoration: InputDecoration(
+                                                labelText: 'Telepon'),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              goEditAnggota(
+                                                  context,
+                                                  noIndukController.text,
+                                                  namaController.text,
+                                                  tanggalLahirController.text,
+                                                  alamatController.text,
+                                                  phoneController.text,
+                                                  Anggota.id);
+                                              
+                                            },
+                                            child: const Text("Perbarui")),
+                                      ],
+                                    );
+                                  },
+                                );
 
                                 // goEditAnggota(
                                 //   context,
@@ -318,6 +342,8 @@ class _CommunityViewState extends State<CommunityView> {
                       "id": AnggotaJson["id"],
                       "nama": AnggotaJson["nama"],
                       "alamat": AnggotaJson["alamat"],
+                      "tgl_lahir": AnggotaJson["tgl_lahir"],
+                      "telepon": AnggotaJson["telepon"],
                     }))
                 .toList();
           });
@@ -325,7 +351,7 @@ class _CommunityViewState extends State<CommunityView> {
       } else {
         print('Error: API request failed: ${response.statusCode}');
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print('Terjadi kesalahan: ${e.message}');
     } finally {
       setState(() {
@@ -405,12 +431,11 @@ class _CommunityViewState extends State<CommunityView> {
     }
   }
 
-  void goEditAnggota(
-      BuildContext context, noInduk, nama, tanggalLahir, alamat, phone) async {
-   
+  void goEditAnggota(BuildContext context, noInduk, nama, tanggalLahir, alamat,
+      phone, id) async {
     try {
       final _response = await _dio.put(
-        '$_apiUrl/anggota',
+        '$_apiUrl/anggota/${id}',
         options: Options(
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
         ),
@@ -430,7 +455,7 @@ class _CommunityViewState extends State<CommunityView> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text("Berhasil"),
-              content: const Text("Anggota Baru Berhasil Ditambahkan!"),
+              content: const Text("Data Anggota Berhasil DIperbarui!"),
               actions: <Widget>[
                 MaterialButton(
                   child: const Text("OK"),
@@ -449,7 +474,7 @@ class _CommunityViewState extends State<CommunityView> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text("Error"),
-              content: const Text("Anggota Baru Gagal Ditambahkan. Coba Lagi!"),
+              content: const Text("Data Anggota Gagal Diperbarui. Coba Lagi!"),
               actions: <Widget>[
                 MaterialButton(
                   child: const Text("OK"),
@@ -461,7 +486,6 @@ class _CommunityViewState extends State<CommunityView> {
             );
           },
         );
-        
       }
     } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
@@ -470,7 +494,7 @@ class _CommunityViewState extends State<CommunityView> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Error"),
-            content: const Text("Anggota Baru Gagal Ditambahkan. Coba Lagi!"),
+            content: const Text("Data Anggota Gagal Diperbarui. Coba Lagi!"),
             actions: <Widget>[
               MaterialButton(
                 child: const Text("OK"),
