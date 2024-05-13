@@ -73,7 +73,6 @@ class _GreetingViewState extends State<GreetingView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GestureDetector(
                   onTap: () {
-                    // print("daftar");
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return const RegisterView();

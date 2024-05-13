@@ -103,7 +103,7 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: true,
         iconSize: 32,
-        selectedItemColor: blueColor,
+        selectedItemColor: fontGrayColor,
         selectedFontSize: 18,
         unselectedItemColor: fontGrayColor,
         items: [
@@ -131,7 +131,9 @@ class _HomeViewState extends State<HomeView> {
           BottomNavigationBarItem(
             icon: IconButton(
               icon: const Icon(Icons.groups),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/community');
+              },
             ),
             label: 'Komunitas',
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tugas1/utility/colors.dart';
+import 'package:tugas1/views/addAnggota.dart';
+import 'package:tugas1/views/community.dart';
 import 'package:tugas1/views/greeting.dart';
 import 'package:tugas1/views/home.dart';
 import 'package:tugas1/views/login.dart';
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterView(),
         '/greeting': (context) => const GreetingView(),
         '/profile': (context) => const ProfileView(),
+        '/community': (context) => const CommunityView(),
+        '/addAnggota': (context) => const AddAnggotaView(),
       },
       initialRoute: '/',
       debugShowCheckedModeBanner: false,
@@ -33,7 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: blueColor),
         useMaterial3: true,
       ),
-      home:  const OnboardingView(),
+      home: const OnboardingView(),
     );
   }
 }
