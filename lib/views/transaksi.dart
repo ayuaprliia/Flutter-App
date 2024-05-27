@@ -449,7 +449,7 @@ class _TransaksiViewState extends State<TransaksiView> {
             child: Row(
               children: [
                 Text(
-                  'Silahkan Pilih Satu Jenis Transaksi',
+                  'Silahkan Pilih Satu Member untuk\n Melakukan Transaksi',
                   style: TextStyle(
                     fontFamily: "PoppinsSemiBold",
                     fontSize: 18,
