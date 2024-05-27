@@ -86,7 +86,7 @@ class _TransaksiViewState extends State<TransaksiView> {
     }
   }
 
-  Future<List<Tabungan>> _getTabunganList(int anggotaId) async {
+  Future<List<Tabungan>> getListTabungan(int anggotaId) async {
     try {
       final response = await _dio.get(
         '$_apiUrl/tabungan/$anggotaId',
@@ -104,6 +104,7 @@ class _TransaksiViewState extends State<TransaksiView> {
                 "trx_tanggal": TabunganJson["trx_tanggal"],
                 "trx_id": TabunganJson["trx_id"],
                 "trx_nominal": TabunganJson["trx_nominal"],
+                "trx_name": TabunganJson["trx_name"],
               })).toList();
         } else {
           throw Exception('Tabungan Tidak Ditemukan');
@@ -117,7 +118,7 @@ class _TransaksiViewState extends State<TransaksiView> {
     }
   }
 
-  void _showMenuDialog(BuildContext context, AnggotaList anggota) {
+  void showMenuDialog(BuildContext context, AnggotaList anggota) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -330,7 +331,7 @@ class _TransaksiViewState extends State<TransaksiView> {
                 ),
                 const SizedBox(height: 10),
                 FutureBuilder<List<Tabungan>>(
-                  future: _getTabunganList(anggota.id),
+                  future: getListTabungan(anggota.id),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
@@ -347,40 +348,43 @@ class _TransaksiViewState extends State<TransaksiView> {
                           style: TextStyle(color: Colors.white),
                         );
                       } else {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: tabunganList.length,
-                          itemBuilder: (context, index) {
-                            final tabungan = tabunganList[index];
-                            return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 5),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: ListTile(
-                                title: Text(
-                                  'Tanggal: ${tabungan.trxTanggal}',
-                                  style: const TextStyle(color: Colors.white),
+                        return Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: tabunganList.length,
+                            itemBuilder: (context, index) {
+                              final tabungan = tabunganList[index];
+                              return Container(
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'ID Transaksi: ${tabungan.trxId}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    Text(
-                                      'Nominal: Rp ${tabungan.trxNominal}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ],
+                                child: ListTile(
+                                  title: Text(
+                                    'Tanggal: ${tabungan.trxTanggal}',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'ID Transaksi: ${tabungan.trxId}',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                      Text(
+                                        'Nominal: Rp ${tabungan.trxNominal}',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         );
                       }
                     } else {
@@ -487,7 +491,7 @@ class _TransaksiViewState extends State<TransaksiView> {
                           trailing: IconButton(
                             icon: const Icon(Icons.menu, color: Colors.white),
                             onPressed: () {
-                              _showMenuDialog(context, Anggota);
+                              showMenuDialog(context, Anggota);
                             },
                           ),
                           onTap: () {},

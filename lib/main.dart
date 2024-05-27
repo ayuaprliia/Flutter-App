@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => const OnboardingView(),
         '/transaksi': (context) => const TransaksiView(),
       },
-      initialRoute: '/login',
+      initialRoute: '/onboarding',
       debugShowCheckedModeBanner: false,
       title: 'tugas1',
       theme: ThemeData(

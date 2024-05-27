@@ -26,13 +26,13 @@ class _InsertTransaksiViewState extends State<InsertTransaksiView> {
   @override
   void initState() {
     super.initState();
-    fetchTrxList();
+    GetMAsterTransaksi();
   }
 
-  Future<void> fetchTrxList() async {
+  Future<void> GetMAsterTransaksi() async {
     try {
       final response = await _dio.get(
-        '$_apiUrl/jenistransaksi', // Sesuaikan dengan endpoint API Anda
+        '$_apiUrl/jenistransaksi',
         options: Options(
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
         ),
@@ -221,15 +221,26 @@ class _InsertTransaksiViewState extends State<InsertTransaksiView> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text("Berhasil!"),
-              content: const Text("Transaksi Berhasil Ditambahkan"),
+              backgroundColor: blueColor,
+              title: const Text(
+                "Berhasil!",
+                style: TextStyle(color: Colors.white),
+              ),
+              content: const Text(
+                "Transaksi Berhasil Ditambahkan",
+                style: TextStyle(color: Colors.white),
+              ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   },
-                  child: const Text("OK"),
+                  child: const Text(
+                    "OK",
+                    style: TextStyle(
+                        color: Colors.white, fontFamily: "PoppinsSemiBold"),
+                  ),
                 ),
               ],
             );
@@ -239,7 +250,7 @@ class _InsertTransaksiViewState extends State<InsertTransaksiView> {
         showErrorDialog(context,
             "Transaksi Gagal, Mohon Periksa Kembali Jenis Transaksi dan Nominal Transaksi");
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       setState(() {
         isLoading = false;
       });
@@ -257,14 +268,25 @@ class _InsertTransaksiViewState extends State<InsertTransaksiView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Error"),
-          content: Text(message),
+          backgroundColor: blueColor,
+          title: const Text(
+            "Error",
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            message,
+            style: const TextStyle(color: Colors.white),
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("OK"),
+              child: const Text(
+                "OK",
+                style: TextStyle(
+                    color: Colors.white, fontFamily: "PoppinsSemiBold"),
+              ),
             ),
           ],
         );

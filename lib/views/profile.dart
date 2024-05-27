@@ -181,7 +181,7 @@ class _ProfileViewState extends State<ProfileView> {
               padding: const EdgeInsets.only(top: 30.0),
               child: ElevatedButton(
                 onPressed: () {
-                  goLogout();
+                  _showLogoutConfirmation(context);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: blueColor),
                 child: const Text(
@@ -236,6 +236,34 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
+  void _showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: blueColor,
+          title: const Text('Konfirmasi Logout', style: TextStyle(color: Colors.white),),
+          content: const Text('Apakah Anda Yakin ingin Logout?', style: TextStyle(color: Colors.white),),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Batal', style: TextStyle(color: Colors.white, fontFamily: "PoppinsSemiBold"),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                goLogout();
+              },
+              child: const Text('Logout', style: TextStyle(color: Colors.white, fontFamily: "PoppinsSemiBold"),),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void goLogout() async {
     try {
       final response = await _dio.get(
@@ -246,7 +274,6 @@ class _ProfileViewState extends State<ProfileView> {
       );
       await _storage.remove('token');
       if (response.statusCode == 200) {
-        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/greeting');
       }
 
