@@ -1,13 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tugas1/utility/colors.dart';
 
 final _dio = Dio();
 final _storage = GetStorage();
-final _apiUrl = 'https://mobileapis.manpits.xyz/api';
+const _apiUrl = 'https://mobileapis.manpits.xyz/api';
 String _userName = "";
 String _email = "";
 
@@ -222,7 +220,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   void getUser() async {
     try {
-      final _response = await _dio.get(
+      final response = await _dio.get(
         "$_apiUrl/user",
         options: Options(
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
@@ -230,8 +228,8 @@ class _ProfileViewState extends State<ProfileView> {
       );
 
       setState(() {
-        _userName = _response.data['data']['user']['name'];
-        _email = _response.data['data']['user']['email'];
+        _userName = response.data['data']['user']['name'];
+        _email = response.data['data']['user']['email'];
       });
     } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
@@ -240,19 +238,19 @@ class _ProfileViewState extends State<ProfileView> {
 
   void goLogout() async {
     try {
-      final _response = await _dio.get(
-        '${_apiUrl}/logout',
+      final response = await _dio.get(
+        '$_apiUrl/logout',
         options: Options(
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
         ),
       );
       await _storage.remove('token');
-      if (_response.statusCode == 200) {
+      if (response.statusCode == 200) {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/greeting');
       }
 
-      print(_response.data);
+      print(response.data);
     } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
     }

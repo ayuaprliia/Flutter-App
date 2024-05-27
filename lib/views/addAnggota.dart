@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tugas1/utility/colors.dart';
 
 class AddAnggotaView extends StatefulWidget {
-  const AddAnggotaView({Key? key}) : super(key: key);
+  const AddAnggotaView({super.key});
 
   @override
   State<AddAnggotaView> createState() => _AddAnggotaViewState();
@@ -53,7 +53,7 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
                 color: Colors.black,
               ),
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 40,
               child: TextField(
@@ -64,7 +64,7 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
                 ),
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             const Text(
               'Nama Lengkap',
               style: TextStyle(
@@ -72,7 +72,7 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
                 color: Colors.black,
               ),
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 40,
               child: TextField(
@@ -91,7 +91,7 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
                 color: Colors.black,
               ),
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 40,
               child: TextField(
@@ -110,7 +110,7 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
                 color: Colors.black,
               ),
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 40,
               child: TextField(
@@ -129,7 +129,7 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
                 color: Colors.black,
               ),
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 40,
               child: TextField(
@@ -153,8 +153,7 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          10), 
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     backgroundColor: blueColor,
                   ),
@@ -176,7 +175,7 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
 
   void goAddAnggota(BuildContext context) async {
     try {
-      final _response = await _dio.post(
+      final response = await _dio.post(
         '$_apiUrl/anggota',
         options: Options(
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
@@ -190,8 +189,8 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
           'status_aktif': 1,
         },
       );
-      _storage.write('data', _response.data['data']);
-      if (_response.statusCode == 200) {
+      _storage.write('data', response.data['data']);
+      if (response.statusCode == 200) {
         showDialog(
           context: context,
           builder: (BuildContext context) {

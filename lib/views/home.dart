@@ -7,7 +7,7 @@ import 'package:tugas1/utility/colors.dart';
 
 final _dio = Dio();
 final _storage = GetStorage();
-final _apiUrl = 'https://mobileapis.manpits.xyz/api';
+const _apiUrl = 'https://mobileapis.manpits.xyz/api';
 String _userName = "";
 
 class HomeView extends StatefulWidget {
@@ -26,6 +26,7 @@ class _HomeViewState extends State<HomeView> {
     getUser();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
@@ -116,10 +117,21 @@ class _HomeViewState extends State<HomeView> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-              icon: const Icon(Icons.menu_book),
-              onPressed: () {},
+              icon: const Icon(Icons.groups),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/community');
+              },
             ),
-            label: 'Modul',
+            label: 'Member',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              icon: const Icon(Icons.paid),
+              onPressed: () {
+                Navigator.pushNamed(context, '/transaksi');
+              },
+            ),
+            label: 'Transaksi',
           ),
           BottomNavigationBarItem(
             icon: IconButton(
@@ -127,15 +139,6 @@ class _HomeViewState extends State<HomeView> {
               onPressed: () {},
             ),
             label: 'FunQuiz',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              icon: const Icon(Icons.groups),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/community');
-              },
-            ),
-            label: 'Komunitas',
           ),
           BottomNavigationBarItem(
             icon: IconButton(
@@ -153,7 +156,7 @@ class _HomeViewState extends State<HomeView> {
 
   void getUser() async {
     try {
-      final _response = await _dio.get(
+      final response = await _dio.get(
         "$_apiUrl/user",
         options: Options(
           headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
@@ -161,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
       );
 
       setState(() {
-        _userName = _response.data['data']['user']['name'];
+        _userName = response.data['data']['user']['name'];
       });
     } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');

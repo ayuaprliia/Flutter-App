@@ -6,10 +6,10 @@ import 'package:tugas1/views/register.dart';
 
 final _dio = Dio();
 final _storage = GetStorage();
-final _apiUrl = 'https://mobileapis.manpits.xyz/api';
+const _apiUrl = 'https://mobileapis.manpits.xyz/api';
 
 class LoginView extends StatefulWidget {
-  LoginView({super.key});
+  const LoginView({super.key});
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -44,7 +44,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: const Size.fromHeight(70),
         child: AppBar(
           flexibleSpace: Container(
             color: grayColor,
@@ -246,15 +246,15 @@ class _LoginViewState extends State<LoginView> {
 
   void goLogin() async {
     try {
-      final _response = await _dio.post('${_apiUrl}/login', data: {
+      final response = await _dio.post('$_apiUrl/login', data: {
         'email': emailController.text,
         'password': passwordController.text
       });
-      if (_response.statusCode == 200) {
+      if (response.statusCode == 200) {
         Navigator.pushReplacementNamed(context, '/home');
       }
-      print(_response.data);
-      _storage.write('token', _response.data['data']['token']);
+      print(response.data);
+      _storage.write('token', response.data['data']['token']);
     } on DioException catch (e) {
       print('${e.response} - ${e.response?.statusCode}');
     }

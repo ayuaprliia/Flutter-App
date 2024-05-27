@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas1/views/register.dart';
+
 import '../utility/colors.dart';
 
 class GreetingView extends StatefulWidget {

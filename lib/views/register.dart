@@ -6,7 +6,7 @@ import 'package:tugas1/views/onboarding.dart';
 
 final _dio = Dio();
 final _storage = GetStorage();
-final _apiUrl = 'https://mobileapis.manpits.xyz/api';
+const _apiUrl = 'https://mobileapis.manpits.xyz/api';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -46,7 +46,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: const Size.fromHeight(70),
         child: AppBar(
           flexibleSpace: Container(
             color: grayColor,
@@ -282,19 +282,19 @@ class _RegisterViewState extends State<RegisterView> {
 
   void goRegister() async {
     try {
-      final _response = await _dio.post(
-        '${_apiUrl}/register',
+      final response = await _dio.post(
+        '$_apiUrl/register',
         data: {
           'name': nameController.text,
           'email': emailController.text,
           'password': passwordController.text,
         },
       );
-      if (_response.statusCode == 200) {
+      if (response.statusCode == 200) {
         Navigator.pushNamed(context, '/login');
       }
 
-      print(_response.data);
+      print(response.data);
     } on DioException catch (e) {
       print(e.message);
       print('${e.response} - ${e.response?.statusCode}');
