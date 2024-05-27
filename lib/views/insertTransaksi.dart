@@ -18,10 +18,39 @@ class _InsertTransaksiViewState extends State<InsertTransaksiView> {
   final GetStorage _storage = GetStorage();
   final String _apiUrl = 'https://mobileapis.manpits.xyz/api';
 
-  final TextEditingController trxIdController = TextEditingController();
   final TextEditingController trxNominalController = TextEditingController();
-
   bool isLoading = false;
+  int? selectedTrxId;
+  List<Map<String, dynamic>> trxList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTrxList();
+  }
+
+  Future<void> fetchTrxList() async {
+    try {
+      final response = await _dio.get(
+        '$_apiUrl/jenistransaksi', // Sesuaikan dengan endpoint API Anda
+        options: Options(
+          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          trxList = List<Map<String, dynamic>>.from(
+              response.data['data']['jenistransaksi']);
+          selectedTrxId = trxList.isNotEmpty ? trxList[0]['id'] : null;
+        });
+      } else {
+        throw Exception('Failed to load transaction types');
+      }
+    } catch (e) {
+      showErrorDialog(context, 'Failed to load transaction types: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,19 +125,26 @@ class _InsertTransaksiViewState extends State<InsertTransaksiView> {
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 20),
                   const Text(
-                    'ID Transaksi',
+                    'Jenis Transaksi',
                     style:
                         TextStyle(fontFamily: "PoppinsRegular", fontSize: 16),
                   ),
                   const SizedBox(height: 10),
-                  TextField(
-                    controller: trxIdController,
-                    decoration: InputDecoration(
-                      hintText: 'Masukkan Id Transaksi ',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
+                  DropdownButton<int>(
+                    isExpanded: true,
+                    value: selectedTrxId,
+                    hint: const Text('Pilih Jenis Transaksi'),
+                    items: trxList.map((Map<String, dynamic> trx) {
+                      return DropdownMenuItem<int>(
+                        value: trx['id'],
+                        child: Text('${trx['id']} - ${trx['trx_name']}'),
+                      );
+                    }).toList(),
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        selectedTrxId = newValue;
+                      });
+                    },
                   ),
                   const SizedBox(height: 20),
                   const Text(
@@ -151,8 +187,13 @@ class _InsertTransaksiViewState extends State<InsertTransaksiView> {
   }
 
   void insertTransaksiTabungan(BuildContext context) async {
-    final trxId = trxIdController.text;
+    final trxId = selectedTrxId;
     final trxNominal = trxNominalController.text;
+
+    if (trxId == null) {
+      showErrorDialog(context, 'Pilih Jenis Transaksi');
+      return;
+    }
 
     try {
       setState(() {
@@ -196,14 +237,14 @@ class _InsertTransaksiViewState extends State<InsertTransaksiView> {
         );
       } else {
         showErrorDialog(context,
-            "Transaksi Gagal, Mohon Perika Kembali Transaksi ID dan Nominal Transaksi");
+            "Transaksi Gagal, Mohon Periksa Kembali Jenis Transaksi dan Nominal Transaksi");
       }
     } on DioError catch (e) {
       setState(() {
         isLoading = false;
       });
       String errorMessage =
-          'Transaksi Gagal, Mohon Perika Kembali Transaksi ID dan Nominal Transaksi';
+          'Transaksi Gagal, Mohon Periksa Kembali Jenis Transaksi dan Nominal Transaksi';
       if (e.response?.statusCode == 409) {
         errorMessage = 'Transaction already exists.';
       }
