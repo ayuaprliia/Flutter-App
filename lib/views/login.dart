@@ -214,16 +214,31 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: Stack(children: [
-                    const Divider(),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "atau masuk dengan",
-                          style: TextStyle(color: fontGrayColor),
-                        ))
-                  ])),
+                padding: const EdgeInsets.only(top: 30),
+                child: Row(
+                  children: [
+                    const Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                        thickness: 1,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "atau masuk dengan",
+                        style: TextStyle(color: fontGrayColor),
+                      ),
+                    ),
+                    const Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                        thickness: 1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Row(

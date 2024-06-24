@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tugas1/utility/colors.dart';
-import 'package:tugas1/views/transaksi.dart';
 
 class Anggota {
   final int id;
@@ -527,7 +526,7 @@ class _AnggotaViewState extends State<AnggotaView> {
                                         TextButton(
                                           onPressed: () async {
                                             deleteAnggota(anggota.id);
-                                            getAnggotaList(); 
+                                            getAnggotaList();
                                             Navigator.of(context).pop();
                                           },
                                           child: const Text('Hapus'),
@@ -565,7 +564,9 @@ class _AnggotaViewState extends State<AnggotaView> {
           BottomNavigationBarItem(
             icon: IconButton(
               icon: const Icon(Icons.groups),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/community');
+              },
             ),
             label: 'Member',
           ),
@@ -580,10 +581,12 @@ class _AnggotaViewState extends State<AnggotaView> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-              icon: const Icon(Icons.quiz),
-              onPressed: () {},
+              icon: const Icon(Icons.attach_money),
+              onPressed: () {
+                Navigator.pushNamed(context, '/settingBunga');
+              },
             ),
-            label: 'FunQuiz',
+            label: 'Bunga',
           ),
           BottomNavigationBarItem(
             icon: IconButton(

@@ -158,6 +158,25 @@ class _TransaksiViewState extends State<TransaksiView> {
                     );
                   },
                 ),
+                // ListTile(
+                //   leading: const Icon(Icons.attach_money, color: Colors.white),
+                //   title: const Text(
+                //     'Insert Bunga Saldo',
+                //     style: TextStyle(color: Colors.white),
+                //   ),
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => InsertTransaksiView(
+                //           anggotaId: anggota.id,
+                //           anggotaNama: anggota.nama,
+                //         ),
+                //       ),
+                //     );
+                //   },
+                // ),
                 ListTile(
                   leading: const Icon(Icons.account_balance_wallet,
                       color: Colors.white),
@@ -167,7 +186,7 @@ class _TransaksiViewState extends State<TransaksiView> {
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
-                    _showSaldoDialog(context, anggota);
+                    showSaldoDialog(context, anggota);
                   },
                 ),
                 ListTile(
@@ -198,7 +217,7 @@ class _TransaksiViewState extends State<TransaksiView> {
     );
   }
 
-  void _showSaldoDialog(BuildContext context, AnggotaList anggota) {
+  void showSaldoDialog(BuildContext context, AnggotaList anggota) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -370,7 +389,7 @@ class _TransaksiViewState extends State<TransaksiView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'ID Transaksi: ${tabungan.trxId}',
+                                        'ID Jenis Transaksi: ${tabungan.trxId}',
                                         style: const TextStyle(
                                             color: Colors.white),
                                       ),
@@ -543,10 +562,12 @@ class _TransaksiViewState extends State<TransaksiView> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-              icon: const Icon(Icons.quiz),
-              onPressed: () {},
+              icon: const Icon(Icons.attach_money),
+              onPressed: () {
+                Navigator.pushNamed(context, '/settingBunga');
+              },
             ),
-            label: 'FunQuiz',
+            label: 'Bunga',
           ),
           BottomNavigationBarItem(
             icon: IconButton(

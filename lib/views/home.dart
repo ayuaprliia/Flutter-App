@@ -104,14 +104,16 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: true,
         iconSize: 32,
-        selectedItemColor: fontGrayColor,
+        selectedItemColor: Colors.grey,
         selectedFontSize: 18,
-        unselectedItemColor: fontGrayColor,
+        unselectedItemColor: Colors.grey,
         items: [
           BottomNavigationBarItem(
             icon: IconButton(
               icon: const Icon(Icons.home),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/home');
+              },
             ),
             label: 'Beranda',
           ),
@@ -119,7 +121,7 @@ class _HomeViewState extends State<HomeView> {
             icon: IconButton(
               icon: const Icon(Icons.groups),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/community');
+                Navigator.pushNamed(context, '/community');
               },
             ),
             label: 'Member',
@@ -135,16 +137,18 @@ class _HomeViewState extends State<HomeView> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-              icon: const Icon(Icons.quiz),
-              onPressed: () {},
+              icon: const Icon(Icons.attach_money),
+              onPressed: () {
+                Navigator.pushNamed(context, '/settingBunga');
+              },
             ),
-            label: 'FunQuiz',
+            label: 'Bunga',
           ),
           BottomNavigationBarItem(
             icon: IconButton(
               icon: const Icon(Icons.person),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/profile');
+                Navigator.pushNamed(context, '/profile');
               },
             ),
             label: 'Profil',
