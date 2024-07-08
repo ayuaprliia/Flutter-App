@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart'; // Import paket intl untuk NumberFormat
 import 'package:tugas1/utility/colors.dart';
-import 'package:tugas1/views/detailAnggota.dart';
 
 class Anggota {
   final int id;
@@ -217,19 +216,9 @@ class _AnggotaViewState extends State<AnggotaView> {
                               ),
                             ],
                           ),
-                          onTap: ()  {
-                            // final result = await Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         DetailAnggotaView(id: anggota.id),
-                            //   ),
-                            // );
-
-                            // if (result == true) {
-                            //   getAnggotaList();
-                            // }
-                            Navigator.pushNamed(context, '/community/${anggota.id}');
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, '/community/${anggota.id}');
                           },
                         ),
                       ),

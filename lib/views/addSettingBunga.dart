@@ -206,6 +206,7 @@ class _AddSettingBungaViewState extends State<AddSettingBungaView> {
       showErrorDialog(context, 'Terjadi kesalahan: ${e.message}');
     }
   }
+  
 
   void showErrorDialog(BuildContext context, String message) {
     showDialog(

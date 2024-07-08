@@ -195,28 +195,6 @@ class _ListSettingBungaViewState extends State<ListSettingBungaView> {
               ],
             ),
           ),
-          TextField(
-            cursorColor: Colors.grey,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none,
-              ),
-              hintText: 'Cari Setting Bunga',
-              hintStyle: const TextStyle(
-                fontFamily: "PoppinsRegular",
-                fontSize: 12,
-                color: Colors.grey,
-              ),
-              prefixIcon: Container(
-                padding: const EdgeInsets.all(15),
-                width: 18,
-                child: const Icon(Icons.search),
-              ),
-            ),
-          ),
           _isLoading
               ? const Center(child: CircularProgressIndicator())
               : _settings.isEmpty
@@ -326,6 +304,6 @@ class _ListSettingBungaViewState extends State<ListSettingBungaView> {
               ),
             ],
           )
-        : const SizedBox.shrink(); // Kosongkan widget jika tidak ada data
+        : const SizedBox.shrink(); 
   }
 }

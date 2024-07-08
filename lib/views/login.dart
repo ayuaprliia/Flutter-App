@@ -24,7 +24,6 @@ class _LoginViewState extends State<LoginView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -245,6 +244,14 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void goLogin() async {
+    if (!isValidEmail(emailController.text)) {
+      setState(() {
+        errorMessage = true;
+        errMessage = 'Format email tidak valid!';
+      });
+      return;
+    }
+
     try {
       final response = await _dio.post('$_apiUrl/login', data: {
         'email': emailController.text,
@@ -252,11 +259,44 @@ class _LoginViewState extends State<LoginView> {
       });
       if (response.statusCode == 200) {
         Navigator.pushReplacementNamed(context, '/home');
+        _storage.write('token', response.data['data']['token']);
+      } else {
+        showErrorDialog(
+            'Email atau password Anda salah! Mohon periksa kembali.');
       }
-      print(response.data);
-      _storage.write('token', response.data['data']['token']);
     } on DioException catch (e) {
-      print('${e.response} - ${e.response?.statusCode}');
+      if (e.response?.statusCode == 401) {
+        showErrorDialog(
+            'Email atau password Anda salah! Mohon periksa kembali.');
+      } else {
+        showErrorDialog(
+            'Email atau password Anda salah! Mohon periksa kembali');
+      }
     }
+  }
+
+  bool isValidEmail(String email) {
+    final regex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    return regex.hasMatch(email);
+  }
+
+  void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Peringatan"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
