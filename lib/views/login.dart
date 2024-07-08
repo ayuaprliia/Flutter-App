@@ -24,21 +24,6 @@ class _LoginViewState extends State<LoginView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  // void validityCheck() {
-  //   if (passwordController.text.isEmpty) {
-  //     setState(() {
-  //       errorMessage = true;
-  //     });
-  //     errMessage = "password cant be empty";
-  //   } else if (emailController.text.isEmpty) {
-  //     setState(() {
-  //       errorMessage = true;
-  //       errMessage = "invalid phone number";
-  //     });
-  //   } else {
-  //     goLogin();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

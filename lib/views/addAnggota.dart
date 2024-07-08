@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:tugas1/utility/colors.dart';
 
 class AddAnggotaView extends StatefulWidget {
@@ -20,6 +21,8 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
   final tanggalLahirController = TextEditingController();
   final alamatController = TextEditingController();
   final phoneController = TextEditingController();
+
+  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -113,11 +116,30 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
             SizedBox(
               width: double.infinity,
               height: 40,
-              child: TextField(
+              child: TextFormField(
                 controller: tanggalLahirController,
-                decoration: const InputDecoration(
+                readOnly: true,
+                decoration: InputDecoration(
                   hintText: 'TTTT-BB-HH',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.calendar_today),
+                    onPressed: () async {
+                      final DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now(),
+                      );
+                      if (pickedDate != null && pickedDate != selectedDate) {
+                        setState(() {
+                          selectedDate = pickedDate;
+                          tanggalLahirController.text =
+                              DateFormat('yyyy-MM-dd').format(selectedDate);
+                        });
+                      }
+                    },
+                  ),
                 ),
               ),
             ),
@@ -174,42 +196,95 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
   }
 
   void goAddAnggota(BuildContext context) async {
-    try {
-      final response = await _dio.post(
-        '$_apiUrl/anggota',
-        options: Options(
-          headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
-        ),
-        data: {
-          'nomor_induk': noIndukController.text,
-          'nama': namaController.text,
-          'alamat': alamatController.text,
-          'tgl_lahir': tanggalLahirController.text,
-          'telepon': phoneController.text,
-          'status_aktif': 1,
-        },
-      );
-      _storage.write('data', response.data['data']);
-      if (response.statusCode == 200) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Berhasil"),
-              content: const Text("Anggota Baru Berhasil Ditambahkan!"),
-              actions: <Widget>[
-                MaterialButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.pushNamed(context, '/community');
-                  },
-                ),
-              ],
-            );
+    // Menampilkan dialog konfirmasi
+    bool confirm = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Konfirmasi"),
+          content:
+              const Text("Apakah Anda yakin ingin menambahkan anggota ini?"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(false); // Memberikan nilai false saat dibatalkan
+              },
+            ),
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(true); // Memberikan nilai true saat dikonfirmasi
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    // Jika dikonfirmasi, lakukan request HTTP
+    if (confirm == true) {
+      try {
+        final response = await _dio.post(
+          '$_apiUrl/anggota',
+          options: Options(
+            headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
+          ),
+          data: {
+            'nomor_induk': noIndukController.text,
+            'nama': namaController.text,
+            'alamat': alamatController.text,
+            'tgl_lahir': tanggalLahirController.text,
+            'telepon': phoneController.text,
+            'status_aktif': 1,
           },
         );
-      } else {
+
+        _storage.write('data', response.data['data']);
+
+        if (response.statusCode == 200) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Berhasil"),
+                content: const Text("Anggota Baru Berhasil Ditambahkan!"),
+                actions: <Widget>[
+                  MaterialButton(
+                    child: const Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.pushNamed(context, '/community');
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Error"),
+                content:
+                    const Text("Anggota Baru Gagal Ditambahkan. Coba Lagi!"),
+                actions: <Widget>[
+                  MaterialButton(
+                    child: const Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } on DioException catch (e) {
+        print('${e.response} - ${e.response?.statusCode}');
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -228,25 +303,6 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
           },
         );
       }
-    } on DioException catch (e) {
-      print('${e.response} - ${e.response?.statusCode}');
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Error"),
-            content: const Text("Anggota Baru Gagal Ditambahkan. Coba Lagi!"),
-            actions: <Widget>[
-              MaterialButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
     }
   }
 }

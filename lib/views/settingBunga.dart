@@ -260,15 +260,6 @@ class _ListSettingBungaViewState extends State<ListSettingBungaView> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-              icon: const Icon(Icons.paid),
-              onPressed: () {
-                Navigator.pushNamed(context, '/transaksi');
-              },
-            ),
-            label: 'Transaksi',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
               icon: const Icon(Icons.attach_money),
               onPressed: () {
                 Navigator.pushNamed(context, '/settingBunga');

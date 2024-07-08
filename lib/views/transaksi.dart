@@ -27,12 +27,14 @@ class Tabungan {
   final String trxTanggal;
   final int trxId;
   final int trxNominal;
+  final String trxName;
 
   Tabungan({
     required this.id,
     required this.trxTanggal,
     required this.trxId,
     required this.trxNominal,
+    required this.trxName,
   });
 
   factory Tabungan.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class Tabungan {
       trxTanggal: json['trx_tanggal'] ?? '',
       trxId: json['trx_id'] ?? 0,
       trxNominal: json['trx_nominal'] ?? 0,
+      trxName: json['trx_name'] ?? '',
     );
   }
 }
@@ -480,6 +483,28 @@ class _TransaksiViewState extends State<TransaksiView> {
                   ),
                 ),
               ],
+            ),
+          ),
+          TextField(
+            cursorColor: Colors.grey,
+            decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none,
+              ),
+              hintText: 'Cari Anggota',
+              hintStyle: const TextStyle(
+                fontFamily: "PoppinsRegular",
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+              prefixIcon: Container(
+                padding: const EdgeInsets.all(15),
+                width: 18,
+                child: const Icon(Icons.search),
+              ),
             ),
           ),
           Expanded(

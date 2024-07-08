@@ -4,6 +4,7 @@ import 'package:tugas1/utility/colors.dart';
 import 'package:tugas1/views/addAnggota.dart';
 import 'package:tugas1/views/addSettingBunga.dart';
 import 'package:tugas1/views/anggota.dart';
+import 'package:tugas1/views/detailAnggota.dart';
 import 'package:tugas1/views/greeting.dart';
 import 'package:tugas1/views/home.dart';
 import 'package:tugas1/views/login.dart';
@@ -24,6 +25,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: (settings) {
+        final uri = Uri.parse(settings.name!);
+        if (uri.pathSegments.length == 2 &&
+            uri.pathSegments.first == 'community') {
+          final id = uri.pathSegments[1];
+          return MaterialPageRoute(
+            builder: (context) => DetailAnggotaView(
+              id: int.tryParse(id) ?? 0,
+            ),
+            settings: RouteSettings(name: settings.name),
+          );
+        }
+        return null; // Return null for unknown routes
+      },
       routes: {
         '/home': (context) => const HomeView(),
         '/login': (context) => const LoginView(),
