@@ -16,7 +16,7 @@ class _AddSettingBungaViewState extends State<AddSettingBungaView> {
   final String _apiUrl = 'https://mobileapis.manpits.xyz/api';
 
   final TextEditingController persenController = TextEditingController();
-  String selectedStatus = '1'; // Default value, aktif
+  String selectedStatus = '1'; 
   bool isLoading = false;
 
   @override
@@ -182,8 +182,8 @@ class _AddSettingBungaViewState extends State<AddSettingBungaView> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                    Navigator.pop(context, true); // Go back with result
+                    Navigator.of(context).pop(); 
+                    Navigator.pop(context, true);
                   },
                   child: const Text(
                     "OK",
