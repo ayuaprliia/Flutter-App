@@ -475,7 +475,6 @@ class _DetailAnggotaViewState extends State<DetailAnggotaView> {
                       padding: const EdgeInsets.all(16.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigator.of(context).pop();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -638,7 +637,7 @@ class _DetailAnggotaViewState extends State<DetailAnggotaView> {
                     itemCount: tabunganList.length,
                     itemBuilder: (context, index) {
                       Tabungan tabungan = tabunganList[index];
-                      // Format nominal menjadi format mata uang
+                      // adding the Rp format
                       String formattedNominal = NumberFormat.currency(
                         locale: 'id_ID',
                         symbol: 'Rp ',
