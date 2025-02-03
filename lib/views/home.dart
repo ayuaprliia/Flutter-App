@@ -165,24 +165,4 @@ class _HomeViewState extends State<HomeView> {
       print('${e.response} - ${e.response?.statusCode}');
     }
   }
-
-  // void goLogout() async {
-  //   try {
-  //     final _response = await _dio.get(
-  //       '${_apiUrl}/logout',
-  //       options: Options(
-  //         headers: {'Authorization': 'Bearer ${_storage.read('token')}'},
-  //       ),
-  //     );
-  //     await _storage.remove('token');
-  //     if (_response.statusCode == 200) {
-  //       // ignore: use_build_context_synchronously
-  //       Navigator.pushReplacementNamed(context, '/greeting');
-  //     }
-
-  //     print(_response.data);
-  //   } on DioException catch (e) {
-  //     print('${e.response} - ${e.response?.statusCode}');
-  //   }
-  // }
 }
