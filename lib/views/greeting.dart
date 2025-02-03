@@ -17,10 +17,11 @@ class _GreetingViewState extends State<GreetingView> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
-              8, 55, 8, 55), //mengatur posisi dan jarak text dengan gambar
+              8, 55, 8, 55), 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Heading
               const Padding(
                 padding: EdgeInsets.only(bottom: 16.0),
                 child: Text(
@@ -29,6 +30,7 @@ class _GreetingViewState extends State<GreetingView> {
                   style: TextStyle(fontFamily: "PoppinsBold", fontSize: 24),
                 ),
               ),
+              // subtitle text
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
@@ -40,12 +42,13 @@ class _GreetingViewState extends State<GreetingView> {
                       color: fontGrayColor),
                 ),
               ),
+              //image
               Padding(
                 padding: const EdgeInsets.fromLTRB(55, 60, 55, 90),
                 child: Image.asset('assets/images/greeting.png'),
               ),
 
-              //membuat button
+              //login button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GestureDetector(
@@ -70,6 +73,7 @@ class _GreetingViewState extends State<GreetingView> {
                 ),
               ),
 
+              // register button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GestureDetector(
