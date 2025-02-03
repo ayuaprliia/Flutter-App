@@ -16,7 +16,7 @@ class _AddSettingBungaViewState extends State<AddSettingBungaView> {
   final String _apiUrl = 'https://mobileapis.manpits.xyz/api';
 
   final TextEditingController persenController = TextEditingController();
-  String selectedStatus = '1'; 
+  String selectedStatus = '1'; // Default status: Aktif
   bool isLoading = false;
 
   @override
@@ -24,44 +24,7 @@ class _AddSettingBungaViewState extends State<AddSettingBungaView> {
     return Scaffold(
       body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 10),
-            decoration: BoxDecoration(
-              color: blueColor,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const Text(
-                      "Add Setting Bunga",
-                      style: TextStyle(
-                        fontFamily: "PoppinsSemiBold",
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          _buildHeader(context), // Header section
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -69,64 +32,13 @@ class _AddSettingBungaViewState extends State<AddSettingBungaView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  const Text(
-                    'Persentase',
-                    style:
-                        TextStyle(fontFamily: "PoppinsRegular", fontSize: 16),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: persenController,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    decoration: InputDecoration(
-                      hintText: 'Masukkan Persentase Bunga, misal (1.1)',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
+                  _buildTextField('Persentase', persenController,
+                      'Masukkan Persentase Bunga, misal (1.1)'),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Status Bunga',
-                    style:
-                        TextStyle(fontFamily: "PoppinsRegular", fontSize: 16),
-                  ),
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField<String>(
-                    isExpanded: true,
-                    value: selectedStatus,
-                    items: const [
-                      DropdownMenuItem(
-                        value: '1',
-                        child: Text('Aktif'),
-                      ),
-                      DropdownMenuItem(
-                        value: '0',
-                        child: Text('Tidak Aktif'),
-                      ),
-                    ],
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedStatus = newValue!;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 30, width: 100),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () => addSettingBunga(context),
-                      child: const Text('Submit'),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  if (isLoading)
-                    Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(blueColor),
-                        strokeWidth: 3,
-                      ),
-                    ),
+                  _buildDropdown(),
+                  const SizedBox(height: 30),
+                  _buildSubmitButton(),
+                  if (isLoading) _buildLoadingIndicator(),
                 ],
               ),
             ),
@@ -136,6 +48,100 @@ class _AddSettingBungaViewState extends State<AddSettingBungaView> {
     );
   }
 
+  /// Builds the header section with back button and title
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(15, 15, 15, 10),
+      decoration: BoxDecoration(
+        color: blueColor,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        ),
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
+          ),
+          const Text(
+            "Add Setting Bunga",
+            style: TextStyle(
+              fontFamily: "PoppinsSemiBold",
+              color: Colors.white,
+              fontSize: 24,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Builds a text field with a label
+  Widget _buildTextField(String label, TextEditingController controller, String hint) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontFamily: "PoppinsRegular", fontSize: 16)),
+        const SizedBox(height: 10),
+        TextField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: InputDecoration(
+            hintText: hint,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Builds the dropdown for status selection
+  Widget _buildDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Status Bunga', style: TextStyle(fontFamily: "PoppinsRegular", fontSize: 16)),
+        const SizedBox(height: 10),
+        DropdownButtonFormField<String>(
+          isExpanded: true,
+          value: selectedStatus,
+          items: const [
+            DropdownMenuItem(value: '1', child: Text('Aktif')),
+            DropdownMenuItem(value: '0', child: Text('Tidak Aktif')),
+          ],
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedStatus = newValue!;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  /// Builds the submit button
+  Widget _buildSubmitButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () => addSettingBunga(context),
+        child: const Text('Submit'),
+      ),
+    );
+  }
+
+  /// Builds a loading indicator when submitting
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(blueColor),
+        strokeWidth: 3,
+      ),
+    );
+  }
+
+  /// Sends the request to add setting bunga
   void addSettingBunga(BuildContext context) async {
     final persen = persenController.text;
     final status = selectedStatus;
@@ -146,9 +152,7 @@ class _AddSettingBungaViewState extends State<AddSettingBungaView> {
     }
 
     try {
-      setState(() {
-        isLoading = true;
-      });
+      setState(() => isLoading = true);
 
       final response = await _dio.post(
         '$_apiUrl/addsettingbunga',
@@ -161,77 +165,55 @@ class _AddSettingBungaViewState extends State<AddSettingBungaView> {
         },
       );
 
-      setState(() {
-        isLoading = false;
-      });
+      setState(() => isLoading = false);
 
       if (response.statusCode == 200) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: blueColor,
-              title: const Text(
-                "Berhasil!",
-                style: TextStyle(color: Colors.white),
-              ),
-              content: const Text(
-                "Setting bunga berhasil ditambahkan",
-                style: TextStyle(color: Colors.white),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); 
-                    Navigator.pop(context, true);
-                  },
-                  child: const Text(
-                    "OK",
-                    style: TextStyle(
-                        color: Colors.white, fontFamily: "PoppinsSemiBold"),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
+        _showSuccessDialog(context);
       } else {
-        showErrorDialog(context,
-            "Gagal menambahkan setting bunga. Periksa kembali persen dan status bunga.");
+        showErrorDialog(context, "Gagal menambahkan setting bunga.");
       }
     } on DioException catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+      setState(() => isLoading = false);
       showErrorDialog(context, 'Terjadi kesalahan: ${e.message}');
     }
   }
-  
 
+  /// Show success dialog
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: blueColor,
+          title: const Text("Berhasil!", style: TextStyle(color: Colors.white)),
+          content: const Text("Setting bunga berhasil ditambahkan", style: TextStyle(color: Colors.white)),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pop(context, true);
+              },
+              child: const Text("OK", style: TextStyle(color: Colors.white, fontFamily: "PoppinsSemiBold")),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Show error dialog
   void showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: blueColor,
-          title: const Text(
-            "Error",
-            style: TextStyle(color: Colors.white),
-          ),
-          content: Text(
-            message,
-            style: const TextStyle(color: Colors.white),
-          ),
+          title: const Text("Error", style: TextStyle(color: Colors.white)),
+          content: Text(message, style: const TextStyle(color: Colors.white)),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                "OK",
-                style: TextStyle(
-                    color: Colors.white, fontFamily: "PoppinsSemiBold"),
-              ),
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("OK", style: TextStyle(color: Colors.white, fontFamily: "PoppinsSemiBold")),
             ),
           ],
         );
